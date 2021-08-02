@@ -12,9 +12,11 @@ import org.slf4j.LoggerFactory;
 public class Soak {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static void main(char[] argv) {
-
+    public static void main(String[] argv) {
+        final Soak soak = new Soak();
+        soak.soak();
     }
+
     public void soakOnce() throws IOException {
         final long now = System.nanoTime();
         final Random random = new Random(now);
