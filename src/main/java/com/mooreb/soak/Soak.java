@@ -1,13 +1,16 @@
 package com.mooreb.soak;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Soak {
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static void main(String[] argv) {
         final Soak soak = new Soak();
@@ -18,7 +21,7 @@ public class Soak {
         final long now = System.nanoTime();
         final Random random = new Random(now);
         final int count = Math.abs(random.nextInt());
-        System.out.println("computing " + count + " xors");
+        LOG.info("computing {} xors", count);
         byte[] bytesIn = new byte[16];
         byte[] bytesOut = new byte[16];
         for(int i=0; i<count; i++) {
@@ -29,8 +32,8 @@ public class Soak {
                 bytesOut[j] = (byte) out;
             }
         }
-        System.out.println("computed " + count + " xors");
-        System.out.println("writing /tmp/" + now);
+        LOG.info("computed {} xors", count);
+        LOG.info("writing /tmp/{}", now);
         final Path outputPath = Paths.get("/tmp", Long.toString(now));
         Files.write(outputPath, bytesOut);
     }
@@ -42,7 +45,7 @@ public class Soak {
                 soakOnce();
             }
             catch(IOException e) {
-                System.out.println("caught IOException");
+                LOG.warn("caught IOException", e);
             }
         }
     }
